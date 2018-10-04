@@ -53,15 +53,22 @@ public class Setting extends Fragment implements  View.OnClickListener {
          * @param view
          */
         public void onClick(View view) {
-                if (view.getId() == rBiru.getId()) {
+                if (view.getId() == rBiru.getId()) { //Jika yang dipilih warna hijau akan berubah warna shapenya jadi biru
                         this.activity.color = Color.BLUE;
 
-                } else if (view.getId() == rHijau.getId()) {
+                } else if (view.getId() == rHijau.getId()) { //Jika yang dipilih warna biru akan berubah warna shapenya jadi hijau
                         this.activity.color = Color.GREEN;
                 }
-                else if(view.getId() == rMerah.getId()){
+                else if(view.getId() == rMerah.getId()){ //Jika yang dipilih warna merah akan berubah warna shapenya jadi merah
                     this.activity.color = Color.RED;
-            }
+                }
+
+                if(view.getId() == r1.getId()){ //Jika yang dipilih r1 shapes akan menjadi circle saat bermain
+
+                }
+                else if (view.getId() == r2.getId()){ //Jika yang dipilih r2 shapes akan menjadi rectangle saat bermain
+
+                }
 
         }
 }

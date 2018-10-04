@@ -99,7 +99,7 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
         this.gameField.setImageBitmap(this.mBitmap);
         this.mCanvas = new Canvas(this.mBitmap);
         this.present = new Presenter(this.activity);
-        rectRandomize();
+        shapeRandomize();
 
     }
 
@@ -113,9 +113,9 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
 
     /*
     * Shape randomise method
-    * Create rectangle on randomised position
+    * Create rectangle  and circle on randomised position
     * */
-    protected void rectRandomize(){
+    protected void shapeRandomize(){
         this.shapes.setColor(this.activity.color);
         rect = this.present.randomisedRect();
         int bound1 = (int) this.width;
@@ -124,7 +124,7 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
          circleY = this.random.nextInt(bound2);
 
         if(rect.contains(circleX, circleY) == true){
-            rectRandomize();
+            shapeRandomize();
         }
         else{
 
@@ -139,11 +139,7 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
 
     }
 
-    /**
-     * Method to create circles on randomised position
-     *
-     *
-     * */
+
 
 
 
@@ -180,7 +176,7 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
                 present.addScore();
                 score.setText("Score : " + Integer.toString(present.getTotalScore()));
                 clearCanvas();
-                rectRandomize();
+                shapeRandomize();
                // circleRandom();
 
             }
@@ -189,7 +185,7 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
                 Log.d("debug","touched");
                 Log.d("debug","x :" + x + " y :" + y);
                 clearCanvas();
-                rectRandomize();
+                shapeRandomize();
 
                // circleRandom();
             }

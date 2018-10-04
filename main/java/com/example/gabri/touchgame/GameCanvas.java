@@ -140,9 +140,6 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
     }
 
 
-
-
-
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         this.mGesture.onTouchEvent(motionEvent);
@@ -170,28 +167,60 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
             float touchX = (float) Math.pow(x-circleX,2);
             float touchY = (float) Math.pow(y-circleY,2);
 
-            if(x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom){
-                Log.d("debug","touched");
-                Log.d("debug","x :" + x + " y :" + y);
-                present.addScore();
-                score.setText("Score : " + Integer.toString(present.getTotalScore()));
-                clearCanvas();
-                shapeRandomize();
-               // circleRandom();
 
-            }
-            else if(touchX + touchY <= 80 * 80){
-                present.subScore();
-                Log.d("debug","touched");
-                Log.d("debug","x :" + x + " y :" + y);
-                clearCanvas();
-                shapeRandomize();
 
-               // circleRandom();
+            if(activity.shapesCode == 1){
+
+                 if(touchX + touchY <= 80 * 80){
+                    present.addScore();
+                     score.setText("Score : " + Integer.toString(present.getTotalScore()));
+                    Log.d("debug","touched");
+                    Log.d("debug","x :" + x + " y :" + y);
+                    clearCanvas();
+                    shapeRandomize();
+
+                    // circleRandom();
+                }
+                 else if(x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom){
+                     Log.d("debug","touched");
+                     Log.d("debug","x :" + x + " y :" + y);
+                     present.subScore();
+                     score.setText("Score : " + Integer.toString(present.getTotalScore()));
+                     clearCanvas();
+                     shapeRandomize();
+                     // circleRandom();
+
+                 }
+                else {
+                    Log.d("debug","untouched");
+                    Log.d("debug","x :" + x + " y :" + y);
+                }
             }
-            else {
-                Log.d("debug","untouched");
-                Log.d("debug","x :" + x + " y :" + y);
+            else if(activity.shapesCode == 2){
+                if(x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom){
+                    Log.d("debug","touched");
+                    Log.d("debug","x :" + x + " y :" + y);
+                    present.addScore();
+                    score.setText("Score : " + Integer.toString(present.getTotalScore()));
+                    clearCanvas();
+                    shapeRandomize();
+                    // circleRandom();
+
+                }
+                else if(touchX + touchY <= 80 * 80){
+                    present.subScore();
+                    score.setText("Score : " + Integer.toString(present.getTotalScore()));
+                    Log.d("debug","touched");
+                    Log.d("debug","x :" + x + " y :" + y);
+                    clearCanvas();
+                    shapeRandomize();
+
+                    // circleRandom();
+                }
+                else {
+                    Log.d("debug","untouched");
+                    Log.d("debug","x :" + x + " y :" + y);
+                }
             }
             return true;
         }

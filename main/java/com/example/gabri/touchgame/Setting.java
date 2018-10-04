@@ -39,6 +39,8 @@ public class Setting extends Fragment implements  View.OnClickListener {
                 rHijau = inflate.findViewById(R.id.radioHijau);
 
                 //Set OnClick Button
+                r1.setOnClickListener(this);
+                r2.setOnClickListener(this);
                 rBiru.setOnClickListener(this);
                 rMerah.setOnClickListener(this);
                 rHijau.setOnClickListener(this);
@@ -60,14 +62,14 @@ public class Setting extends Fragment implements  View.OnClickListener {
                         this.activity.color = Color.GREEN;
                 }
                 else if(view.getId() == rMerah.getId()){ //Jika yang dipilih warna merah akan berubah warna shapenya jadi merah
-                    this.activity.color = Color.RED;
+                        this.activity.color = Color.RED;
                 }
 
                 if(view.getId() == r1.getId()){ //Jika yang dipilih r1 shapes akan menjadi circle saat bermain
-
+                        this.activity.shapesCode = 1;
                 }
                 else if (view.getId() == r2.getId()){ //Jika yang dipilih r2 shapes akan menjadi rectangle saat bermain
-
+                        this.activity.shapesCode = 2;
                 }
 
         }

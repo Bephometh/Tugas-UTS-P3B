@@ -10,6 +10,11 @@
         android:text="Select the shape"
         android:layout_marginLeft="5px"/>
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
     <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +26,7 @@
         android:text="Rectangle"
         android:id="@+id/choiceRectangle"/>
 
+    </RadioGroup>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

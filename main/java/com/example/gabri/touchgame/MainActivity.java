@@ -1,5 +1,6 @@
 package com.example.gabri.touchgame;
 
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,8 +16,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected Button startButt;
     protected  Button settings;
     protected Setting settingclass;
-    protected int color;
-    protected int shapesCode;
+    protected int color = Color.BLUE;
+    protected int shapesCode = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

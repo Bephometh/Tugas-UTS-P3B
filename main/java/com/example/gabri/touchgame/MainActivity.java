@@ -14,8 +14,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected GameCanvas game;
     protected FragmentManager fragment;
     protected Button startButt;
-    protected  Button settings;
+    protected Button settings;
+    protected Button scoreButt;
     protected Setting settingclass;
+    protected History historyScore;
+    protected Presenter presenter;
     protected int color = Color.BLUE;
     protected int shapesCode = 2;
 
@@ -27,11 +30,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.fragment = this.getSupportFragmentManager();
         this.game = GameCanvas.newInstance(this);
         this.settings = this.findViewById(R.id.settingbtn);
+        this.scoreButt = this.findViewById(R.id.history_button);
         this.settingclass = Setting.newInstance(this);
+        this.historyScore = History.newInstance(this);
+        this.presenter = new Presenter(this);
 
         //set on click
         this.startButt.setOnClickListener(this);
         this.settings.setOnClickListener(this);
+        this.scoreButt.setOnClickListener(this);
 
     }
 
@@ -47,5 +54,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragmentTransaction.replace(R.id.frag_container,settingclass);
             fragmentTransaction.commit();
         }
+        else if(view == scoreButt){
+            goToHistory();
+        }
+    }
+
+    //pindah ke fragment score
+    public void goToHistory(){
+        FragmentTransaction fragmentTransaction = this.fragment.beginTransaction();
+        fragmentTransaction.replace(R.id.frag_container,historyScore);
+        fragmentTransaction.commit();
     }
 }

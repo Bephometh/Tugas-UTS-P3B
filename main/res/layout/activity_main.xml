@@ -8,20 +8,31 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/star_game_frag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Game"
-        android:id="@+id/star_game_frag"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center"
-        android:layout_marginLeft="65dp"/>
+        android:layout_toStartOf="@+id/settingbtn"
+        android:text="Start Game" />
 
-    <Button android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
+    <Button
         android:id="@+id/settingbtn"
-        android:text="Settings"
-        android:layout_toRightOf="@+id/star_game_frag"
-        android:layout_marginLeft="20dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:text="Settings" />
+
+    <Button
+        android:id="@+id/history_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:layout_toEndOf="@+id/settingbtn"
+        android:text="SCORE" />
 
     <RelativeLayout
         android:layout_height="match_parent"

@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -42,14 +43,15 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
     protected Random random;
     protected SimpleGesture simpleGesture;
     protected MainActivity activity;
-    protected Button startTest;
     protected RectF rect;
     protected Presenter present;
     protected float width;
     protected float height;
     protected  float circleX;
     protected float circleY;
-
+    private long timeLeftInMilliSecconds;
+    private CountDownTimer countDownTimer;
+    protected TextView cdTime;
 
     public GameCanvas() {
         // Required empty public constructor
@@ -59,6 +61,7 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
 
         GameCanvas fragment = new GameCanvas();
         fragment.activity = activity;
+
         return fragment;
     }
 
@@ -67,30 +70,30 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-      View inflate = inflater.inflate(R.layout.fragment_game_canvas, container, false);
-      this.gameField=inflate.findViewById(R.id.game_field);
-      this.score = inflate.findViewById(R.id.score);
-      this.startTest = inflate.findViewById(R.id.test_button);
+        View inflate = inflater.inflate(R.layout.fragment_game_canvas, container, false);
+        this.gameField=inflate.findViewById(R.id.game_field);
+        this.score = inflate.findViewById(R.id.score);
+        this.gameField.setOnTouchListener(this);
 
-      //Set On click (currently a test)
-      this.startTest.setOnClickListener(this);
-      this.gameField.setOnTouchListener(this);
+        // Initialise Attribute
+        this.simpleGesture = new SimpleGesture();
+        this.random = new Random();
+        this.activity.presenter.resetScore();
 
-      // Initialise Attribute
-      this.simpleGesture = new SimpleGesture();
-      this.random = new Random();
+        this.mGesture = new GestureDetector(activity,simpleGesture);
 
-      this.mGesture = new GestureDetector(activity,simpleGesture);
-
-
-      return inflate;
+        this.cdTime = inflate.findViewById(R.id.cobaTime);
+        this.timeLeftInMilliSecconds=130000;//10 second
+        startTime();
+        startTimeChangeShape();
+        return inflate;
     }
 
     /*
-    *  Test create canvas method
-    *  DO NOT change
-    *
-    * */
+     *  Test create canvas method
+     *  DO NOT change
+     *
+     * */
     public void initiateCanvas(){
         this.mBitmap = Bitmap.createBitmap(this.gameField.getWidth(), this.gameField.getHeight(), Bitmap.Config.ARGB_8888);
         this.height = this.gameField.getHeight();
@@ -98,45 +101,58 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
         this.shapes = new Paint();
         this.gameField.setImageBitmap(this.mBitmap);
         this.mCanvas = new Canvas(this.mBitmap);
-        this.present = new Presenter(this.activity);
         shapeRandomize();
 
     }
 
     /*
-    * Method for clearing the canvas
-    * */
+     * Method for clearing the canvas
+     * */
     public void clearCanvas(){
         this.mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         this.gameField.invalidate();
     }
 
     /*
-    * Shape randomise method
-    * Create rectangle  and circle on randomised position
-    * */
+     * Shape randomise method
+     * Create rectangle  and circle on randomised position
+     * */
     protected void shapeRandomize(){
-        this.shapes.setColor(this.activity.color);
-        rect = this.present.randomisedRect();
+        rect = this.activity.presenter.randomisedRect();
         int bound1 = (int) this.width;
         int bound2 = (int) this.height;
-         circleX = this.random.nextInt(bound1);
-         circleY = this.random.nextInt(bound2);
+        circleX = this.random.nextInt(bound1);
+        circleY = this.random.nextInt(bound2);
 
-        if(rect.contains(circleX, circleY) == true){
-            shapeRandomize();
+        //TO set the color of the shape to be touched
+        if(activity.shapesCode == 1){
+            if(rect.contains(circleX, circleY) == true){
+                shapeRandomize();
+            }
+            else{
+                this.shapes.setColor(Color.MAGENTA);
+                this.mCanvas.drawRect(rect, this.shapes);
+                this.shapes.setColor(this.activity.color);
+                this.mCanvas.drawCircle(circleX, circleY, 80,this.shapes);
+                Log.d("debug","x :" + circleX + " y :" + circleY);
+                Log.d("debug", "randomized");
+                Log.d("debug","left :" + rect.left +" top :" + rect.top + " right :" + rect.right + " bottom :" + rect.bottom);
+            }
         }
-        else{
-
-            this.mCanvas.drawRect(rect, this.shapes);
-            this.shapes.setColor(Color.MAGENTA);
-            this.mCanvas.drawCircle(circleX, circleY, 80,this.shapes);
-            Log.d("debug","x :" + circleX + " y :" + circleY);
-            Log.d("debug", "randomized");
-            Log.d("debug","left :" + rect.left +" top :" + rect.top + " right :" + rect.right + " bottom :" + rect.bottom);
+        else if(activity.shapesCode == 2){
+            if(rect.contains(circleX, circleY) == true){
+                shapeRandomize();
+            }
+            else{
+                this.shapes.setColor(this.activity.color);
+                this.mCanvas.drawRect(rect, this.shapes);
+                this.shapes.setColor(Color.MAGENTA);
+                this.mCanvas.drawCircle(circleX, circleY, 80,this.shapes);
+                Log.d("debug","x :" + circleX + " y :" + circleY);
+                Log.d("debug", "randomized");
+                Log.d("debug","left :" + rect.left +" top :" + rect.top + " right :" + rect.right + " bottom :" + rect.bottom);
+            }
         }
-
-
     }
 
 
@@ -153,9 +169,9 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
     }
 
     /*
-    * Inner class gesture
-    *
-    * */
+     * Inner class gesture
+     *
+     * */
     public class SimpleGesture extends GestureDetector.SimpleOnGestureListener {
 
         @Override
@@ -171,9 +187,9 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
 
             if(activity.shapesCode == 1){
 
-                 if(touchX + touchY <= 80 * 80){
-                    present.addScore();
-                     score.setText("Score : " + Integer.toString(present.getTotalScore()));
+                if(touchX + touchY <= 80 * 80){
+                    activity.presenter.addScore();
+                    score.setText("Score : " + Integer.toString(activity.presenter.getTotalScore()));
                     Log.d("debug","touched");
                     Log.d("debug","x :" + x + " y :" + y);
                     clearCanvas();
@@ -181,16 +197,16 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
 
                     // circleRandom();
                 }
-                 else if(x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom){
-                     Log.d("debug","touched");
-                     Log.d("debug","x :" + x + " y :" + y);
-                     present.subScore();
-                     score.setText("Score : " + Integer.toString(present.getTotalScore()));
-                     clearCanvas();
-                     shapeRandomize();
-                     // circleRandom();
+                else if(x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom){
+                    Log.d("debug","touched");
+                    Log.d("debug","x :" + x + " y :" + y);
+                    activity.presenter.subScore();
+                    score.setText("Score : " + Integer.toString(activity.presenter.getTotalScore()));
+                    clearCanvas();
+                    shapeRandomize();
+                    // circleRandom();
 
-                 }
+                }
                 else {
                     Log.d("debug","untouched");
                     Log.d("debug","x :" + x + " y :" + y);
@@ -200,22 +216,20 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
                 if(x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom){
                     Log.d("debug","touched");
                     Log.d("debug","x :" + x + " y :" + y);
-                    present.addScore();
-                    score.setText("Score : " + Integer.toString(present.getTotalScore()));
+                    activity.presenter.addScore();
+                    score.setText("Score : " + Integer.toString(activity.presenter.getTotalScore()));
                     clearCanvas();
                     shapeRandomize();
                     // circleRandom();
 
                 }
                 else if(touchX + touchY <= 80 * 80){
-                    present.subScore();
-                    score.setText("Score : " + Integer.toString(present.getTotalScore()));
+                    activity.presenter.subScore();
+                    score.setText("Score : " + Integer.toString(activity.presenter.getTotalScore()));
                     Log.d("debug","touched");
                     Log.d("debug","x :" + x + " y :" + y);
                     clearCanvas();
                     shapeRandomize();
-
-                    // circleRandom();
                 }
                 else {
                     Log.d("debug","untouched");
@@ -225,5 +239,64 @@ public class GameCanvas extends Fragment implements View.OnTouchListener,View.On
             return true;
         }
     }
+    //memulai waktu mundur
+    public void startTime(){
 
+        countDownTimer = new CountDownTimer(timeLeftInMilliSecconds,1000) {
+
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMilliSecconds = millisUntilFinished;
+                updateTime();
+            }
+
+            @Override
+            public void onFinish() {
+                //cdTime.setText("Selesai");
+                //Go to score
+                activity.goToHistory();
+            }
+        }.start();
+    }
+    //change time
+    public void updateTime(){
+        int minute = (int) timeLeftInMilliSecconds/60000;
+        int second = (int) timeLeftInMilliSecconds%60000/1000;
+
+        String timeLeftText;
+
+        timeLeftText = ""+minute +":";
+        if(second <= 10) timeLeftText +="0";
+        timeLeftText +=second;
+
+        cdTime.setText(timeLeftText);
+    }
+
+    //changeShapePerSecond
+    public void startTimeChangeShape(){
+
+        countDownTimer = new CountDownTimer(timeLeftInMilliSecconds,3000) {
+
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMilliSecconds = millisUntilFinished;
+                initiateCanvas();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+    }
+
+    //Ngambil score dari TextView
+    public int getScoreNow(){
+       // String w= score.getText().toString();
+        int res = activity.presenter.getTotalScore();
+        //int res = Integer.valueOf(w.substring(8));
+        return res;
+    }
 }

@@ -15,16 +15,17 @@
         android:layout_height="wrap_content">
 
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Circle"
-        android:id="@+id/choiceCircle"/>
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rectangle"
-        android:id="@+id/choiceRectangle"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Circle"
+            android:id="@+id/choiceCircle"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rectangle"
+            android:checked="true"
+            android:id="@+id/choiceRectangle"/>
 
     </RadioGroup>
     <TextView
@@ -48,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Blue"
+                android:checked= "true"
                 android:id="@+id/radioBiru"/>
 
             <RadioButton

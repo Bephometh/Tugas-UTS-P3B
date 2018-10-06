@@ -10,6 +10,10 @@ public class ScoreCounter implements Counter {
 
     }
 
+    public void setScore() {
+        this.score = 0;
+    }
+
     public void sub(){
         this.score -= 100;
     }
